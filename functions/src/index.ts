@@ -6,5 +6,5 @@ import projectInfoRouter from "./routes/ProjectInfoRouter";
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/get_projects", projectInfoRouter);
+app.use("/", projectInfoRouter);
 export const api = functions.https.onRequest(app);
