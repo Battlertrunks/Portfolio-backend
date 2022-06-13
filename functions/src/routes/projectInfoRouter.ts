@@ -4,7 +4,6 @@ import Email from "../models/Email";
 import ProjectInfo from "../models/ProjectInfo";
 import nodemailer from "nodemailer";
 import admin from "firebase-admin";
-import functions from "firebase-functions";
 
 admin.initializeApp();
 
