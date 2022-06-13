@@ -1,7 +1,7 @@
 import cors from "cors";
 import express from "express";
 import * as functions from "firebase-functions";
-import projectInfoRouter from "./routes/ProjectInfoRouter";
+import projectInfoRouter from "./routes/projectInfoRouter";
 
 const app = express();
 app.use(cors());
