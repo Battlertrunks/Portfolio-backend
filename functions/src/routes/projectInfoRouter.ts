@@ -47,23 +47,18 @@ projectInfoRouter.get("/get_projects", async (req, res) => {
 
 projectInfoRouter.post("/send-email", async (req, res) => {
   try {
-    exports.addUser = functions.auth.user().onCreate(async (user) => {
-      const email = process.env.MAIL_EMAIL;
-      const password = process.env.MAIL_PASS;
-
-      const mail: Email = {
-        from: req.body.email,
-        to: snap.data().email,
-        subject: "Portfolio Email Message",
-        html: `<p>Name: ${req.body.firstName} ${req.body.lastName}</p>
+    const mail: Email = {
+      from: req.body.email,
+      to: process.env.MAIL_EMAIL!,
+      subject: "Portfolio Email Message",
+      html: `<p>Name: ${req.body.firstName} ${req.body.lastName}</p>
           <p>Email: ${req.body.email}</p>
           <p>Message: ${req.body.message}</p>`,
-      };
+    };
 
-      return contactEmail.sendMail(mail, (error, data) => {
-        if (error) return res.send(false).status(424);
-        else return res.status(200).send(true);
-      });
+    return contactEmail.sendMail(mail, (error, data) => {
+      if (error) return res.send(false).status(424);
+      else return res.status(200).send(true);
     });
   } catch (error) {
     errorResponse(error, res);
