@@ -3,15 +3,22 @@ import { getClient } from "../db";
 import Email from "../models/Email";
 import ProjectInfo from "../models/ProjectInfo";
 import nodemailer from "nodemailer";
+import admin from "firebase-admin";
+import functions from "firebase-functions";
+
+admin.initializeApp();
 
 const projectInfoRouter = express.Router();
 
 const contactEmail = nodemailer.createTransport({
-  service: "gmail",
+  host: "stmp.gmail.com",
+  service: "Gmail",
+  secure: true,
   auth: {
     user: process.env.MAIL_EMAIL,
     pass: process.env.MAIL_PASS,
   },
+  port: 465,
 });
 
 contactEmail.verify((error) => {
@@ -40,19 +47,24 @@ projectInfoRouter.get("/get_projects", async (req, res) => {
 
 projectInfoRouter.post("/send-email", async (req, res) => {
   try {
-    const mail: Email = await {
-      from: req.body.email,
-      to: process.env.MAIL_EMAIL || "",
-      subject: "Portfolio Email Message",
-      html: `<p>Name: ${req.body.firstName} ${req.body.lastName}</p>
+    exports.addUser = functions.auth.user().onCreate(async (user) => {
+      const email = process.env.MAIL_EMAIL;
+      const password = process.env.MAIL_PASS;
+
+      const mail: Email = {
+        from: req.body.email,
+        to: snap.data().email,
+        subject: "Portfolio Email Message",
+        html: `<p>Name: ${req.body.firstName} ${req.body.lastName}</p>
           <p>Email: ${req.body.email}</p>
           <p>Message: ${req.body.message}</p>`,
-    };
+      };
 
-    await contactEmail.sendMail(mail, (error) => {
-      if (error) res.send(false).status(424);
+      return contactEmail.sendMail(mail, (error, data) => {
+        if (error) return res.send(false).status(424);
+        else return res.status(200).send(true);
+      });
     });
-    res.status(200).send(true);
   } catch (error) {
     errorResponse(error, res);
   }
