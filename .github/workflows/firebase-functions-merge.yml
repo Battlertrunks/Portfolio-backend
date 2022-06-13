@@ -13,8 +13,8 @@ jobs:
           node-version: 14.x
       - run: npm ci
         env:
-          MAIL_EMAIL: `${{ secrets.MAIL_EMAIL }}`
-          MAIL_PASS: `${{ secrets.MAIL_PASS }}`
+          MAIL_EMAIL: ${{ secrets.MAIL_EMAIL }}
+          MAIL_PASS: ${{ secrets.MAIL_PASS }}
         working-directory: ./functions
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
